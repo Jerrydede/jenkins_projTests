@@ -1,15 +1,17 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-  reporter: 'mochawesome',
+  reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
-    reportDir: 'cypress/results',
-    overwrite: false,
-    html: false,
-    json: true,
+    reportDir: 'cypress/reports',
+    charts: true,               // Erstellt kleine Diagramme
+    embeddedScreenshots: true,  // Baut Screenshots direkt in die HTML-Datei ein
+    inlineAssets: true,         // Keine extra Ordner für Bilder nötig
   },
   e2e: {
-    supportFile: false,
-    setupNodeEvents(on, config) {},
+    setupNodeEvents(on, config) {
+      // Das Plugin wird hier registriert
+      require('cypress-mochawesome-reporter/plugin')(on);
+    },
   },
 });
