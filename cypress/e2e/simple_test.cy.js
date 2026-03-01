@@ -1,30 +1,34 @@
-describe('Erweiterte Jenkins Statistik Tests', () => {
+describe('Jenkins Statistik Demo - Universal Tests', () => {
 
-  it('1. Erfolgreicher Test: Google Suche ist erreichbar', () => {
-    cy.visit('https://www.google.com');
-    cy.get('img.lnXpPe', { timeout: 10000 }).should('be.visible');
-  });
-
-  it('2. Fehlgeschlagener Test: Falscher Text auf Wikipedia', () => {
+  // 1. SUCCESS: Prüft einfach, ob die Seite geladen wurde (Universal)
+  it('1. Erfolg: Wikipedia Startseite lädt', () => {
     cy.visit('https://de.wikipedia.org');
-    // Dieser Test wird scheitern und einen Screenshot erzeugen
-    cy.get('#welcome-to-wikipedia').should('contain', 'Willkommen bei Facebook');
+    cy.get('body').should('be.visible'); 
   });
 
-  it('3. Erfolgreicher Test: CSS Check', () => {
-    cy.visit('https://example.com');
-    cy.get('h1').should('have.css', 'font-size', '32px');
+  // 2. FAILURE: Provoziert einen Fehler (Sollte scheitern)
+  it('2. Fehler: Erwartet falschen Text (für Screenshot-Test)', () => {
+    cy.visit('https://www.google.com');
+    // Wir suchen nach Text, der garantiert nicht da ist
+    cy.get('body').should('contain', 'Diese Nachricht existiert nicht');
   });
 
-  it.skip('4. Übersprungener Test (Pending): Feature noch nicht fertig', () => {
+  // 3. SUCCESS: Prüft ein Standard-Element (Universal)
+  it('3. Erfolg: Beispiel-Seite hat eine Überschrift', () => {
     cy.visit('https://example.com');
-    cy.get('.new-feature').click();
+    cy.get('h1').should('exist');
   });
 
-  it('5. Fehlgeschlagener Test: Element existiert nicht', () => {
+  // 4. PENDING: Wird übersprungen (Blau/Grau in der Statistik)
+  it.skip('4. Skip: Dieser Test wird in der Statistik als "Pending" gelistet', () => {
     cy.visit('https://example.com');
-    // Cypress wird 4 Sekunden suchen und dann mit Fehler abbrechen
-    cy.get('#nicht-vorhandener-button').click();
+  });
+
+  // 5. FAILURE: Zeitüberschreitung (Sollte scheitern)
+  it('5. Fehler: Sucht nach einem Element, das es nicht gibt', () => {
+    cy.visit('https://example.com');
+    // Cypress wartet 4 Sek. auf dieses ID, findet sie nicht -> Fail
+    cy.get('#nicht-existierende-id-123').should('exist');
   });
 
 });
