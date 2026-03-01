@@ -1,5 +1,3 @@
-import 'cypress-mochawesome-reporter/register';
-
 describe('Jenkins Statistik Demo - Universal Tests', () => {
 
   // 1. SUCCESS: Prüft einfach, ob die Seite geladen wurde (Universal)
