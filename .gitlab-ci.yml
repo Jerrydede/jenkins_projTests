@@ -18,8 +18,8 @@ cache:
 
 cypress-run:
   stage: test
-  # Nutze hier ein Image, das sicher existiert (Node 20 + Browser)
-  image: cypress/browsers:node-20.17.0-chrome-128.0.6613.119-ff-128.0.3-edge-128.0.2739.42-1
+  # Dieses Tag ist viel kürzer und weniger fehleranfällig:
+  image: cypress/browsers:node-22.12.0-chrome-131.0.6778.85-ff-133.0.3-edge-131.0.2903.70-1
   script:
     - npm install
     - npx cypress run --browser chrome
