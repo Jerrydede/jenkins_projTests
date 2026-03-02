@@ -83,4 +83,14 @@ describe('Umfangreiche Jenkins Report Demo', () => {
     cy.get('h1').should('have.attr', 'class', 'falsche-klasse');
   });
 
+  it('16 - Erfolg: Grundlegender Page Load Test', () => {
+    cy.visit('https://example.com');
+    cy.get('body').should('exist');
+  });
+
+  it('17 - Erfolg: Google Search Input ist sichtbar', () => {
+    cy.visit('https://www.google.com');
+    cy.get('input[name="q"]').should('be.visible');
+  });
+
 });
