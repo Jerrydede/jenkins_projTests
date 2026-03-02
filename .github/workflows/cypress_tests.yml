@@ -27,3 +27,10 @@ jobs:
         with:
           name: cypress-screenshots
           path: cypress/screenshots
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: always() # Auch hochladen, wenn Tests fehlschlagen!
+        with:
+          folder: cypress/reports # Der Ordner, den Cypress erstellt hat
+          branch: gh-pages        # Der Ziel-Branch für die Webseite
