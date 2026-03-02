@@ -10,7 +10,15 @@ on:
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-latest # GitHub stellt einen frischen Linux-Server
+    # Hier definieren wir die Matrix
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    
+    # Hier wird der jeweilige Wert aus der Matrix eingesetzt
+    runs-on: ${{ matrix.os }}
+    #runs-on: ubuntu-latest # GitHub stellt einen frischen Linux-Server
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
