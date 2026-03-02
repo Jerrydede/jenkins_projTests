@@ -1,0 +1,41 @@
+stages:
+  - test
+  - deploy
+
+# Wir nutzen ein fertiges Image von Cypress, das alle Browser enthält
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm
+    - .cache/Cypress
+    - node_modules
+
+cypress-run:
+  stage: test
+  image: cypress/browsers:node-20.14.1-chrome-125.0.6422.141-ff-126.0.1-edge-125.0.2535.85-1
+  script:
+    - npm install
+    - npx cypress run --browser chrom-e
+  artifacts:
+    when: always
+    paths:
+      - cypress/screenshots
+      - cypress/reports
+    expire_in: 1 week
+
+pages:
+  stage: deploy
+  dependencies:
+    - cypress-run
+  script:
+    - mkdir public
+    - cp -r cypress/reports/* public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
