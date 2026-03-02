@@ -1,8 +1,10 @@
+# Globales Image (wird genutzt, wenn im Job nichts anderes steht)
+image: cypress/browsers:latest 
+
 stages:
   - test
   - deploy
 
-# Wir nutzen ein fertiges Image von Cypress, das alle Browser enthält
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
@@ -16,10 +18,11 @@ cache:
 
 cypress-run:
   stage: test
-  image: cypress/browsers:node-20.14.1-chrome-125.0.6422.141-ff-126.0.1-edge-125.0.2535.85-1
+  # Nutze hier ein Image, das sicher existiert (Node 20 + Browser)
+  image: cypress/browsers:node-20.17.0-chrome-128.0.6613.119-ff-128.0.3-edge-128.0.2739.42-1
   script:
     - npm install
-    - npx cypress run --browser chrom-e
+    - npx cypress run --browser chrome
   artifacts:
     when: always
     paths:
@@ -32,7 +35,7 @@ pages:
   dependencies:
     - cypress-run
   script:
-    - mkdir public
+    - mkdir -p public # -p verhindert Fehler, falls Ordner schon da ist
     - cp -r cypress/reports/* public/
   artifacts:
     paths:
