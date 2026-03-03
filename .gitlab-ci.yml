@@ -1,14 +1,19 @@
 stages:
   - test
 
-# Ein super kleines Image (nur ca. 5MB), das garantiert sofort lädt
-image: alpine:latest
+# Wir nehmen ein stabiles, etwas kleineres Image
+image: cypress/base:20.16.0
 
-test-job:
+cypress-test:
   stage: test
   script:
-    - echo "Prüfe Internetverbindung im Runner..."
-    - ping -c 3 google.com
-    - echo "CI/CD Verbindung zu GitLab steht! ✅"
-    - echo "Aktuelles Verzeichnis:"
-    - ls -la
+    - npm install
+    # Wir lassen Cypress erst einmal im "Electron" Browser laufen (standard)
+    # Das braucht am wenigsten Ressourcen
+    - npx cypress run
+  artifacts:
+    when: always
+    paths:
+      - cypress/screenshots
+      - cypress/videos
+    expire_in: 1 day
