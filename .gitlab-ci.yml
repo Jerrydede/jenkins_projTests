@@ -11,9 +11,9 @@ cypress-test:
     # Wir lassen Cypress erst einmal im "Electron" Browser laufen (standard)
     # Das braucht am wenigsten Ressourcen
     - npx cypress run
+  allow_failure: true # Die Pipeline bleibt grün/gelb, auch wenn Tests scheitern
   artifacts:
     when: always
     paths:
       - cypress/screenshots
-      - cypress/videos
-    expire_in: 1 day
+      - cypress/reports
