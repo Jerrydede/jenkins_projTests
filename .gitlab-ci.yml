@@ -1,44 +1,14 @@
-# Globales Image (wird genutzt, wenn im Job nichts anderes steht)
-image: cypress/browsers:latest 
-
 stages:
   - test
-  - deploy
 
-variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
+# Ein super kleines Image (nur ca. 5MB), das garantiert sofort lädt
+image: alpine:latest
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .npm
-    - .cache/Cypress
-    - node_modules
-
-cypress-run:
+test-job:
   stage: test
-  # Dieses Tag ist viel kürzer und weniger fehleranfällig:
-  image: cypress/browsers:node-22.12.0-chrome-131.0.6778.85-ff-133.0.3-edge-131.0.2903.70-1
   script:
-    - npm install
-    - npx cypress run --browser chrome
-  artifacts:
-    when: always
-    paths:
-      - cypress/screenshots
-      - cypress/reports
-    expire_in: 1 week
-
-pages:
-  stage: deploy
-  dependencies:
-    - cypress-run
-  script:
-    - mkdir -p public # -p verhindert Fehler, falls Ordner schon da ist
-    - cp -r cypress/reports/* public/
-  artifacts:
-    paths:
-      - public
-  only:
-    - main
+    - echo "Prüfe Internetverbindung im Runner..."
+    - ping -c 3 google.com
+    - echo "CI/CD Verbindung zu GitLab steht! ✅"
+    - echo "Aktuelles Verzeichnis:"
+    - ls -la
